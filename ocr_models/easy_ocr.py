@@ -3,7 +3,7 @@ Build on EasyOCR library accessible there : https://github.com/JaidedAI/EasyOCR
 """
 
 import easyocr
-
+import numpy as np 
 
 class EasyOCRModel :
     def __init__(self, device) :
@@ -16,9 +16,9 @@ class EasyOCRModel :
         generated_words = []
 
         for image in generated_images :
-            result = self.model.readtext(image, detail=0, decoder="beamsearch")
+            result = self.model.readtext(np.array(image), detail=0, decoder="beamsearch")
 
             word = " ".join(result).lower().strip()
             generated_words.append(word)
 
-        return generated_images
+        return generated_words

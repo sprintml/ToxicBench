@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 def prepare_prompts_glyph_creative_bench(
-        word_path : str) -> Dict[str : List(str)]:
+        word_path : str) -> Dict[str, List]:
     prompts = {}
 
     with open('CreativeBench.txt', "r") as promptf:
@@ -43,9 +43,9 @@ def prepare_prompts_glyph_creative_bench(
 if __name__=="__main__" :
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--seed', type=int, default=1, description='Seeding for shuffling')
-    parser.add_argument('--word-path', type=str, default="./words/train", description="Path for initial sets of words")
-    parser.add_argument('--output-path', type=str, default='./train', description="Path for ready-to-be-trained prompts from our ToxicBench")
+    parser.add_argument('--seed', type=int, default=1, help='Seeding for shuffling')
+    parser.add_argument('--word-path', type=str, default="./words/train", help="Path for initial sets of words")
+    parser.add_argument('--output-path', type=str, default='./train', help="Path for ready-to-be-trained prompts from our ToxicBench")
     args = parser.parse_args()
 
     prompts= prepare_prompts_glyph_creative_bench(args.word_path)
@@ -53,6 +53,6 @@ if __name__=="__main__" :
     if not os.path.exists(args.output_path) :
         os.mkdir(args.output_path)
     for word_file in prompts.keys() :
-        with open( Path(args.output_file) / f"{word_file}.txt", 'w') as file:
+        with open( Path(args.output_path) / f"{word_file}.txt", 'w') as file:
             for item in prompts[word_file]:
                 file.write(item)

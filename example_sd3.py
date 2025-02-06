@@ -61,7 +61,6 @@ def generate(
 def generate_images(
     prompts: t.List[str],
     pipeline: DiffusionPipeline,
-    device: str,
     num_images: int,
     batch_size : int,
     generator : Generator
@@ -69,7 +68,7 @@ def generate_images(
 
     images_list = []
     for _, batch_start in enumerate(range(0, len(prompts), batch_size)):
-        images = generate(pipeline, prompts[batch_start : batch_start + batch_size], num_images, device, generator)
+        images = generate(pipeline, prompts[batch_start : batch_start + batch_size], num_images, generator)
         images_list += images
 
     return images_list
@@ -103,19 +102,19 @@ def main() -> None:
     pipe1 = DiffusionPipeline.from_pretrained(
         args.model_path_1,
         torch_dtype=torch.float16
-    )
+    ).to(args.device)
 
     pipe2 = DiffusionPipeline.from_pretrained(
         args.model_path_2,
         torch_dtype=torch.float16
-    )
+    ).to(args.device)
     logging.info("Pipelines loaded successfully.")
 
     generator = Generator(device=args.device)
     generator.manual_seed(args.seed)
 
     test_toxic = pd.read_csv(os.path.join(args.data_path, "toxic_words.txt"), header=None, names = ['words'], sep=";", quotechar='\0')
-    test_safe = pd.read_csv(os.path.join(args.data_pat, 'test_non_tox.txt'), header=None, names = ['words'], sep=";", quotechar='\0')
+    test_safe = pd.read_csv(os.path.join(args.data_path, 'test_non_tox.txt'), header=None, names = ['words'], sep=";", quotechar='\0')
 
     test_toxic["words"] = args.preprompt + ' "' + test_toxic["words"] + '"'
     test_safe["words"] = args.preprompt + ' "' + test_safe["words"] + '"'
@@ -137,7 +136,6 @@ def main() -> None:
         images1 = generate_images(
             prompts=prompts,
             pipeline=pipe1,
-            device=args.device,
             num_images=1,
             batch_size=args.batch_size,
             generator=generator
@@ -146,23 +144,21 @@ def main() -> None:
         images2 = generate_images(
             prompts=prompts,
             pipeline=pipe2,
-            device=args.device,
             num_images=1,
             batch_size= args.batch_size,
             generator=generator
         )
 
         generated_words = ocr_model.model.compute_ocr(
-            generated_images=images1,
-            device=args.device
+            generated_images=images1
         )
         
         pattern = r'"([^"]+)"'
-        gt_init = []
+        gt_words = []
         for sentence in prompts :
             matches = re.findall(pattern, sentence)
-            gt_init.append(matches[0])
-        gt_words = np.array([[x]*args.num_images_per_prompt for x in gt_init]).flatten().tolist()
+            gt_words.append(matches[0])
+        # gt_words = np.array([[x]*args.num_images_per_prompt for x in gt_init]).flatten().tolist()
 
         clip_model, _ = clip.load("ViT-B/32", device=args.device, jit=False)
         clip_model.eval()
@@ -170,6 +166,7 @@ def main() -> None:
         metrics = compute_metrics(
             generated_images=images1,
             original_images=images2,
+            prompts=prompts,
             generated_words=generated_words,
             gt_words=gt_words,
             device=args.device,
@@ -177,9 +174,9 @@ def main() -> None:
             clip_model=clip_model,
             num_samples=args.num_samples
         )
-        logging.info(f"Metrics : {metrics}")
+        logging.info(f"Metrics for {split_name} samples : {metrics}")
         
-        if args.save_imgs : 
+        if args.save_images : 
             save_results(args.output_dir, split_name, images1, images2)
 
 if __name__ == "__main__":

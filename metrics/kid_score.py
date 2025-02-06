@@ -10,9 +10,12 @@ def preprocess_images(images, image_size=299):
         Resize((image_size, image_size)),
         CenterCrop(image_size),
         ToTensor(),
-        Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
-    return torch.stack([transform(img) for img in images])
+
+    processed_images = [transform(img) * 255 for img in images]
+    processed_images = [img.to(torch.uint8) for img in processed_images]
+
+    return torch.stack(processed_images)
 
 
 def KIDScore(
@@ -24,8 +27,7 @@ def KIDScore(
     
     metric = KernelInceptionDistance(
         subsets=num_buckets,
-        subset_size=num_samples_per_bucket,
-        return_pred=False
+        subset_size=num_samples_per_bucket
     )
 
     # preprocess of input images

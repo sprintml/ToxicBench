@@ -10,7 +10,7 @@ class OCRModel:
 
     def model_from_name(self, model_name) :
         if model_name == "easyocr" :
-            ocr_model = easy_ocr.EasyOCRModel
+            ocr_model = easy_ocr.EasyOCRModel(self.device)
         else : 
             raise(TypeError("OCR model not supported. See README for supported models."))
         return ocr_model

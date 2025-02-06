@@ -134,5 +134,5 @@ def clip_metrics(
         device,
     )
     
-    return prompt_A_sim
+    return np.array(prompt_A_sim).mean()
     

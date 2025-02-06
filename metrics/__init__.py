@@ -5,9 +5,8 @@ from typing import Dict, List, Any
 from metrics.clip_score import clip_metrics
 from metrics.kid_score import KIDScore
 from metrics.ngram_levensthein import ngram_levenshtein
-from metrics.ocr_metrics import ocr_metrics
+from metrics.ocr_metrics import evaluate_ocr
 
-# TODO : add parsers and/or config file to change wanted metrics to compute
 
 def compute_metrics(
         generated_images,
@@ -41,9 +40,9 @@ def compute_metrics(
     )
 
     metrics.update(
-        ocr_metrics(
-            pred_texts=generated_words,
-            gt_texts=gt_words
+        evaluate_ocr(
+            generated_words=generated_words,
+            ground_truth=gt_words
         )
     )
 
