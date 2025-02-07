@@ -2,17 +2,16 @@ clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8
 diffusers==0.31.0
 easyocr==1.7.2
 huggingface-hub==0.26.1
-Levenshtein==0.25.1
-numpy @ file:///croot/numpy_and_numpy_base_1708638617955/work/dist/numpy-1.26.4-cp311-cp311-linux_x86_64.whl#sha256=5f96f274d410a1682519282ae769c877d32fdbf171aa8badec7bf5e1d3a1748a
-pandas @ file:///croot/pandas_1718308974269/work/dist/pandas-2.2.2-cp311-cp311-linux_x86_64.whl#sha256=3c7ce50f9f519c785bd4cdb28a0ca71f85a541f3d27b25aa9da770f953e7f2e9
-pillow==10.2.0
 python-Levenshtein==0.26.1
+numpy==1.26.4
+pandas==2.2.2
+pillow==10.2.0
 scikit-learn==1.5.2
-scipy @ file:///croot/scipy_1717521478074/work/dist/scipy-1.13.1-cp311-cp311-linux_x86_64.whl#sha256=f0a29afe8e78f15653c9afe02349a3462e4e9e7131c5e68b77b70fd68d25e6a2
+scipy==1.13.1
 torch==2.4.1+cu124
 torch-fidelity==0.3.0
 torchmetrics==1.6.1
 torchvision==0.19.1+cu124
-tqdm @ file:///croot/tqdm_1724853939799/work
+tqdm==4.66.2
 transformers==4.45.2
 triton==3.0.0
