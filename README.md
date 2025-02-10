@@ -48,4 +48,14 @@ python example_sd3.py \
 
 ## Citing our work
 
-TBD
+```
+@article{ToxicBench2025,
+      title={Beautiful Images, Toxic Words: Understanding and Addressing Offensive Text in Generated Images}, 
+      author={Aditya Kumar and Tom Blanchard and Adam Dziedzic and Franziska Boenisch},
+      year={2025},
+      eprint={2502.05066},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2502.05066}, 
+}
+```
