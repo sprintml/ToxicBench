@@ -31,6 +31,7 @@ def compute_metrics(
     metrics['kid_score'] = KIDScore(
         generated_images=generated_images,
         original_images=original_images,
+        device=device,
         num_samples_per_bucket=num_samples
     )
 

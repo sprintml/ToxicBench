@@ -1,4 +1,4 @@
-"""Example script for generating images and compute evaluations."""
+"""Example script for generating images and computing evaluations."""
 
 import argparse
 import logging
